@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:module-error-handler-plugin="http://www.mulesoft.org/schema/mule/module-error-handler-plugin" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/module-error-handler-plugin http://www.mulesoft.org/schema/mule/module-error-handler-plugin/current/mule-module-error-handler-plugin.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4194f392-347d-4bc3-81b9-5cb16d479ad4" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="6bc94084-2c5f-4701-8454-cf0cd7c47ebf" name="mule.env" value="DEV" />
+	<configuration-properties doc:name="Configuration properties" doc:id="73f86557-0f1f-4e2b-a778-888f8a419f9e" file="config/config-${mule.env}.yaml" />
+	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="d64ecce8-972e-4298-abf1-655ba1ccea79" environment="${mule.env}" contentFieldsDataMasking="dob,ssn" />
+	
+	<flow name="ci-cd-sampleFlow" doc:id="349c47a5-2c86-469e-866f-c5105057d99b" >
+		<http:listener doc:name="Listener" doc:id="25235a16-30d7-43c8-b1ab-6c85c76dc4ce" config-ref="HTTP_Listener_config" path="/hello"/>
+		<ee:transform doc:name="Transform Message" doc:id="b97adc2d-e3a5-455d-a196-38834a39ee09" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message":" Hello Mule from Pragnesh Desai."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	
+	<flow name="logger-testflow" doc:id="33f41d8b-8c05-47fb-9418-99962fa1c5bc" >
+		<http:listener doc:name="Listener" doc:id="0e4dfd39-db17-421d-b804-aa2f51fd779f" config-ref="HTTP_Listener_config" path="/test-logger"/>
+		<json-logger:logger doc:name="START-LOGGER" doc:id="c7ee6d36-3aff-446e-acc1-860136fc4611" config-ref="JSON_Logger_Config" message="START: logger-testflow"/>
+		<ee:transform doc:name="Send Response" doc:id="35c2fe58-596c-4404-ad85-ec51211a550e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message": "Mule Successfully processed the message."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="END-LOGGER" doc:id="1760c2f2-9d5e-436b-a6ae-aa8e73495466" config-ref="JSON_Logger_Config" message="END: logger-testflow" tracePoint="END">
+			<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: "Flow end successfully."
+}]]]></json-logger:content>
+		</json-logger:logger>			
+	</flow>
+	
+    <flow name="exception-testflow" doc:id="c7d0ab16-2b6a-4af5-8b86-fc1cd57e453a" >
+		<http:listener doc:name="Listener" doc:id="014496fd-ff16-491e-be1c-2e5fdf5189e1" config-ref="HTTP_Listener_config" path="/test-error"/>
+		<json-logger:logger doc:name="START-ERROR" doc:id="6b3405c5-e715-4bbe-91d1-f35c66b209bd" config-ref="JSON_Logger_Config" message="START: exception-testflow"/>
+		<ee:transform doc:name="Send Response" doc:id="d05e7f98-80f5-48a3-b6b7-221e4303b3c2">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message": "Error occurs while processing message."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<raise-error doc:name="Raise error" doc:id="9e683730-b1ff-4497-a311-81bdd0e53add" type="MULE:CONNECTIVITY" description="The server cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state" />
+		<json-logger:logger doc:name="END-ERROR" doc:id="bc2af65b-7aa8-427c-9f80-9c7573a09aed" config-ref="JSON_Logger_Config" message="END: exception-testflow" tracePoint="END">
+			<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: "Flow end successfully."
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cc1243d7-8a66-4d8d-9848-6dd6ee77c0ba" >
+				<json-logger:logger doc:name="Logger" doc:id="c266cf59-0fee-4148-94be-10a7bc4dea52" config-ref="JSON_Logger_Config" tracePoint="EXCEPTION" message='#["ERROR: 503 Service Unavailable: The server cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state."]' priority="ERROR" >
+					<json-logger:content ><![CDATA[{
+   "ErrorCode" : "503”,
+  “ErrorType”:”Service Unavailable",
+  “ErrorDescription”:”The server cannot handle the request (because it is overloaded or down for maintenance). Generally, this is a temporary state.”
+}]]></json-logger:content>
+				</json-logger:logger>
+			</on-error-propagate>
+		</error-handler>			
+	</flow>
+	
+</mule>
+

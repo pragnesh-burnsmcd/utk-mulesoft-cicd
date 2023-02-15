@@ -1,0 +1,48 @@
+
+secure:
+  key: "UtkTN@Vol3602023"
+    
+untilsuccessful:
+  maxretries: "2"
+  frequency:  "5000"
+  
+dwOracledb:
+ host: "bandods.sis.utk.edu"
+ port: "1521"
+ user: "salesforce"
+ instance: "ODSD"
+ servicename: ""
+ schema: "SERVICE_CLOUD_STG_DATVAL"
+ selectQuery: "SELECT DISTINCT owner FROM all_tables ORDER BY owner"
+ onTableRow:
+  frequency: "1"
+  timeUnit: "MINTUES"
+
+bannerdb:
+ host: "banddb.sis.utk.edu"
+ port: "1521"
+ user: "salesforce"
+ instance: "KBANDE"
+ servicename: ""
+ schema: ""
+ selectQuery: "SELECT DISTINCT owner FROM all_tables ORDER BY owner"
+
+# Actual Test: https://utk.instructure.com/doc/api/live#!/
+canvas:
+ hosturl: "utk.instructure.com"
+ port: "443"
+ user: "salesforceapi"
+ accountsUri: "/api/v1/accounts"
+ 
+anthologyEngage:
+ hosturl: "engage-api.campuslabs.com"
+ port: "443"
+ user: "salesforceapi"
+ organizationUri: "/api/v3.0/Organizations/Organization"
+ 
+sfdc:
+ username: "pragnesh.desai@utksalesforce.com.partqa"
+ url: "https://test.salesforce.com/services/Soap/u/53.0"
+ 
+
+ 

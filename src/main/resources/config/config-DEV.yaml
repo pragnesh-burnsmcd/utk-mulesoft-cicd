@@ -1,0 +1,10 @@
+json:
+  logger:
+    application:
+      name: "utk-test-logger"
+      version: "1.0"   
+      
+untilsuccessful:
+  maxretries: "2"
+  frequency:  "5000"
+  
