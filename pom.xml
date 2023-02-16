@@ -17,7 +17,7 @@
 		<anypoint.businessGroup>UTK</anypoint.businessGroup>
 		<anypoint.region>us-east-1</anypoint.region>
 		<anypoint.workers>1</anypoint.workers>
-		<anypoint.environment>${mule.env}</anypoint.environment>
+		<anypoint.environment>UAT</anypoint.environment>
 		<anypoint.workerType>MICRO</anypoint.workerType>	
 		<mule.maven.plugin.version>3.8.1</mule.maven.plugin.version>
 		<mule.http.connector.version>1.5.11</mule.http.connector.version>	
