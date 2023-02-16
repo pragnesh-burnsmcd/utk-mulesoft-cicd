@@ -13,11 +13,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<app.runtime>4.4.0</app.runtime>
-		<app.name>utk-mulesoft-cicd</app.name>		
+		<app.name>utk-mulesoft-cicd-${mule.env}</app.name>		
 		<anypoint.businessGroup>UTK</anypoint.businessGroup>
 		<anypoint.region>us-east-1</anypoint.region>
 		<anypoint.workers>1</anypoint.workers>
-		<anypoint.environment>UAT</anypoint.environment>
+		<anypoint.environment>${mule.env}</anypoint.environment>
 		<anypoint.workerType>MICRO</anypoint.workerType>	
 		<mule.maven.plugin.version>3.8.1</mule.maven.plugin.version>
 		<mule.http.connector.version>1.5.11</mule.http.connector.version>	
@@ -38,7 +38,7 @@
 						<uri>https://anypoint.mulesoft.com</uri>
 						<server>anypoint-dev-id</server>
 						<muleVersion>${app.runtime}</muleVersion>						
-						<applicationName>${ap.name}</applicationName>
+						<applicationName>${app.name}</applicationName>
 						<businessGroup>${anypoint.businessGroup}</businessGroup>
 						<environment>${anypoint.environment}</environment>
 						<region>${anypoint.region}</region>
