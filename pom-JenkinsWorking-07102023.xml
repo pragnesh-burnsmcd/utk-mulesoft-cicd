@@ -13,7 +13,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<app.runtime>4.4.0</app.runtime>
-		<mule.version>4.4.0</mule.version>
 		<app.name>utk-mulesoft-cicd</app.name>		
 		<anypoint.businessGroup>UTK</anypoint.businessGroup>
 		<anypoint.region>us-east-1</anypoint.region>
@@ -24,17 +23,7 @@
 		<mule.http.connector.version>1.5.11</mule.http.connector.version>	
 		<mule.sockets.connector.version>1.1.5</mule.sockets.connector.version>
 		<mule.json.logger.version>2.1.0</mule.json.logger.version>
-		<mule.api.error.handler.version>6.1.0</mule.api.error.handler.version>
-		<cloudhub.environment>DEV</cloudhub.environment>
-		<cloudhub.target>utk-nonprod-privatespace</cloudhub.target>
-		<cloudhub.username>pragnesh-utk</cloudhub.username>
-		<cloudhub.password>Mulesoft2023#</cloudhub.password>
-		<cloudhub.application.name>utk-mulesoft-cicd-ch2</cloudhub.application.name>
-		<cloudhub.businessGroup>The University of Tennessee\UTK</cloudhub.businessGroup>
-		<cloudhub.replicas>1</cloudhub.replicas>
-		<cloudhub.vcores>0.1</cloudhub.vcores>
-		<cloudhub.publicURL>${CH_PUBLIC_URL}</cloudhub.publicURL>
-		<cloudhub.clustered>true</cloudhub.clustered>
+		<mule.api.error.handler.version>6.1.0</mule.api.error.handler.version>		
 	</properties>
 
 	<build>
@@ -44,9 +33,8 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<!-- START CH 1.0 deployment using Jenkins CI-CD
-				  <configuration>					
-					 <cloudHubDeployment>
+				<configuration>
+					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<server>anypoint-dev-id</server>
 						<muleVersion>${app.runtime}</muleVersion>						
@@ -57,45 +45,9 @@
 						<workers>${anypoint.workers}</workers>
 						<workerType>${anypoint.workerType}</workerType>
 						<objectStoreV2>true</objectStoreV2>
-					  </cloudHubDeployment> 					 
-					  <classifier>mule-application</classifier>
+					</cloudHubDeployment>
+					<classifier>mule-application</classifier>
 				</configuration>
-				-->
-				<configuration>
-					<cloudhub2Deployment>
-				      <uri>https://anypoint.mulesoft.com</uri>
-				      <provider>MC</provider>
-				      <environment>${cloudhub.environment}</environment>
-				      <target>${cloudhub.target}</target>
-				      <muleVersion>${mule.version}</muleVersion>
-				      <username>${cloudhub.username}</username>
-				      <password>${cloudhub.password}</password>
-				      <applicationName>${cloudhub.application.name}</applicationName>
-				      <businessGroup>${cloudhub.businessGroup}</businessGroup>
-				      <replicas>${cloudhub.replicas}</replicas>
-				      <vCores>${cloudhub.vcores}</vCores>
-				      <deploymentSettings>
-				        <http>
-				          <inbound>
-				            <publicUrl>${cloudhub.publicURL}/${cloudhub.application.name}</publicUrl>
-				            <forwardSslSession>true</forwardSslSession>
-				            <lastMileSecurity>true</lastMileSecurity>
-				          </inbound>
-				        </http>
-				        <clustered>${cloudhub.clustered}</clustered>
-						<updateStrategy>rolling</updateStrategy>
-						<enforceDeployingReplicasAcrossNodes>false</enforceDeployingReplicasAcrossNodes>
-						<generateDefaultPublicUrl>false</generateDefaultPublicUrl>
-				      </deploymentSettings>
-				      <integrations>
-							<services>
-								<objectStoreV2>
-									<enabled>true</enabled>
-								</objectStoreV2>
-							</services>
-						</integrations>
-				    </cloudhub2Deployment>
-				 </configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -160,12 +112,4 @@
 			<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
 		</pluginRepository>
 	</pluginRepositories>
-	<distributionManagement>
-	    <repository>
-	      <id>utk-anypoint-platform</id>
-	      <name>UTK Corporate Repository</name>
-	      <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/ac9589e0-b856-4ae3-a5c5-037ed17baf44/maven</url>
-	      <layout>default</layout>
-	    </repository>
-  	</distributionManagement>
 </project>
