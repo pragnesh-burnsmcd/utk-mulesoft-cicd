@@ -27,8 +27,8 @@
 		<mule.api.error.handler.version>6.1.0</mule.api.error.handler.version>
 		<cloudhub.environment>DEV</cloudhub.environment>
 		<cloudhub.target>utk-nonprod-privatespace</cloudhub.target>
-		<cloudhub.username>pragnesh-utk</cloudhub.username>
-		<cloudhub.password>Mulesoft2023#</cloudhub.password>
+		<cloudhub.username>${CH_UTK_USERNAME}</cloudhub.username>
+		<cloudhub.password>${CH_UTK_PASSWORD}</cloudhub.password>
 		<cloudhub.application.name>utk-mulesoft-cicd-ch2</cloudhub.application.name>
 		<cloudhub.businessGroup>The University of Tennessee\UTK</cloudhub.businessGroup>
 		<cloudhub.replicas>1</cloudhub.replicas>
